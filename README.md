@@ -1,4 +1,4 @@
 infoBubble
 ==========
 
-comming soon
+coming soon
