@@ -33,7 +33,7 @@ var infoBubble = new Class({
 					e.stop();
 				}.bind(this),
 				'mouseleave': function(){
-					//this.hideBubble(el);
+					this.hideBubble(el);
 				}.bind(this),
 				'mouseover': function(){
 					this.showBubble(el);
@@ -106,16 +106,15 @@ var infoBubble = new Class({
 
 		// TODO limit left 0, window.width
 		var left = (coordinates.left + (coordinates.width/2).round() - (this.options.size.width/2).round());
-		
 		var top = (coordinates.top - this.options.size.height - this.tipHeight - this.options.margin);
 
 		this.bubble.setStyles({
 			left: left,
 			top: top
 		});
-		
+
 		this.bubble.fade(this.options.fade ? 1 : 'show');
-		
+
 		this.getContent(el);
 	}
 	
