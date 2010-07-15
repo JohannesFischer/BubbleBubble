@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>infoBubble Demo</title>
+	<link rel="stylesheet" type="text/css" href="infoBubble.css" />
+	<script type="text/javascript" src="../js/mootools.js"></script>
+	<script type="text/javascript" src="infoBubble.js"></script>
+	<script type="text/javascript">
+		window.addEvent('domready', function(){
+			new infoBubble('a');
+		});
+	</script>
+</head>
+<body>
+
+	<div id="Wrapper">
+
+		<div class="spacer"></div>
+	
+		<h1>infoBubble</h1>
+		
+		<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. <a href="ajax.html">AJAX Content</a> ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
+		et magnis dis <a href="#InlineContent">Inline Content</a>, nascetur ridiculus mus.</p>
+	
+	
+		<div id="InlineContent">
+			<h2>Inline Content</h2>
+			<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+		</div>	
+
+	</div>
+
+</body>
+</html>
