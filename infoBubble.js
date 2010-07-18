@@ -3,16 +3,19 @@ var infoBubble = new Class({
 	Implements: Options,
 	
 	bubble: null,
+	delay: null,
 	elements: null,
 	tipHeight: 10,
+	visible: false,
 
 	options: {
 		fade: true,
 		fxDuration: 250,
 		hideDelay: 2500,
-		margin: 10,
+		marginBottom: 10,
+		marginTop: -20,
 		size: {
-			height: 250,
+			height: 200,
 			width: 250
 		}
 	},
@@ -48,11 +51,11 @@ var infoBubble = new Class({
 			'class': 'infoBubble',
 			styles: {
 				height: this.options.size.height + this.tipHeight,
+				marginTop: this.options.marginTop,
 				opacity: 0,
+				top: -1000,
 				width: this.options.size.width
 			}
-		}).set('tween', {
-			duration: this.options.fxDuration
 		}).adopt(new Element('div', {
 			'class': 'infoBubble-Bubble',
 			styles: {
@@ -60,8 +63,18 @@ var infoBubble = new Class({
 			}
 		})).inject(document.body);
 		
+		if(this.options.fade)
+		{
+			this.bubble.store('fxInstance', new Fx.Morph(this.bubble, {
+				duration: this.options.fxDuration
+			}));
+		}
+		
 		this.bubbleContent = new Element('div', {
-			'class': 'infoBubble-Content'
+			'class': 'infoBubble-Content',
+			styles: {
+				height: this.options.size.height - (this.tipHeight * 2)
+			}
 		}).inject(this.bubble.getFirst('div'));
 	},
 	
@@ -95,27 +108,52 @@ var infoBubble = new Class({
 	
 	hideBubble: function()
 	{
-		(function(){
-			this.bubble.fade(0);
+		this.delay = (function(){
+			//if(this.options.fade)
+			var fx = this.bubble.retrieve('fxInstance');
+			fx.start({
+				marginTop: this.options.marginTop,
+				opacity: 0
+			});
+			this.visible = false;
 		}.bind(this)).delay(this.options.hideDelay);
 	},
 	
 	showBubble: function(el)
 	{
+		$clear(this.delay);
+
 		var coordinates = el.getCoordinates();
 
 		// TODO limit left 0, window.width
 		var left = (coordinates.left + (coordinates.width/2).round() - (this.options.size.width/2).round());
-		var top = (coordinates.top - this.options.size.height - this.tipHeight - this.options.margin);
+		var top = (coordinates.top - this.options.size.height - this.tipHeight - this.options.marginBottom);
 
 		this.bubble.setStyles({
 			left: left,
 			top: top
 		});
 
-		this.bubble.fade(this.options.fade ? 1 : 'show');
-
 		this.getContent(el);
+		
+		if(this.visible)
+		{
+			return;
+		}
+
+		if(this.options.fade)
+		{
+			var fx = this.bubble.retrieve('fxInstance');
+			fx.start({
+				marginTop: 0,
+				opacity: 1
+			});
+			this.visible = true;
+		}
+		else
+		{
+			this.bubble.fade('show');	
+		}
 	}
 	
 });

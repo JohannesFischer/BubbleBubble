@@ -3,7 +3,6 @@
 }
 
 .infoBubble {
-	overflow: hidden;
 	padding: 5px; /* shadow size */
 	position: absolute;
 	z-index: 100;
@@ -47,8 +46,8 @@
 		}
 		.infoBubble-Content {
 			margin: 10px;
+			/*overflow: hidden;*/
 		}
-
 
 .loading {
 	background: url(indicator.gif) no-repeat 50% 50%;
