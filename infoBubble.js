@@ -9,6 +9,7 @@ var infoBubble = new Class({
 	visible: false,
 
 	options: {
+		contentMargin: 10,
 		fade: true,
 		fxDuration: 250,
 		hideDelay: 2500,
@@ -36,7 +37,7 @@ var infoBubble = new Class({
 					e.stop();
 				}.bind(this),
 				'mouseleave': function(){
-					this.hideBubble(el);
+					this.hideBubble();
 				}.bind(this),
 				'mouseover': function(){
 					this.showBubble(el);
@@ -45,27 +46,42 @@ var infoBubble = new Class({
 		}, this);
 	},
 	
+	clearDelay: function()
+	{
+		$clear(this.delay);
+	},
+	
 	createBubble: function()
 	{
-		this.bubble = new Element('div', {
+		this.bubbleContainer = new Element('div', {
 			'class': 'infoBubble',
 			styles: {
-				height: this.options.size.height + this.tipHeight,
+				height: this.options.size.height + this.tipHeight + (this.options.contentMargin * 2),
 				marginTop: this.options.marginTop,
 				opacity: 0,
 				top: -1000,
-				width: this.options.size.width
+				width: this.options.size.width + (this.options.contentMargin * 2)
 			}
-		}).adopt(new Element('div', {
+		}).inject(document.body);;
+		
+		this.bubble = new Element('div', {
 			'class': 'infoBubble-Bubble',
+			events: {
+				'mouseleave': function(){
+					this.hideBubble();
+				}.bind(this),
+				'mouseover': function(){
+					this.clearDelay();
+				}.bind(this)
+			},
 			styles: {
-				height: this.options.size.height
+				height: this.options.size.height + (this.options.contentMargin * 2)
 			}
-		})).inject(document.body);
+		}).inject(this.bubbleContainer);
 		
 		if(this.options.fade)
 		{
-			this.bubble.store('fxInstance', new Fx.Morph(this.bubble, {
+			this.bubbleContainer.store('fxInstance', new Fx.Morph(this.bubbleContainer, {
 				duration: this.options.fxDuration
 			}));
 		}
@@ -73,14 +89,14 @@ var infoBubble = new Class({
 		this.bubbleContent = new Element('div', {
 			'class': 'infoBubble-Content',
 			styles: {
-				height: this.options.size.height - (this.tipHeight * 2)
+				height: this.options.size.height
 			}
-		}).inject(this.bubble.getFirst('div'));
+		}).inject(this.bubble);
 	},
 	
 	getContent: function(el)
 	{
-		this.bubbleContent.empty().addClass('loading');
+		this.resetBubble();
 		
 		var href = el.get('href');
 
@@ -104,10 +120,10 @@ var infoBubble = new Class({
 				var imageSize = image.getSize();
 				
 				var fn = function(){
-					image.set('opacity', 1);
+					image.fade(1);
 				};
 				
-				this.resizeBubble(imageSize.y, imageSize.x, fn);
+				this.resizeBubble(el, imageSize.y, imageSize.x, fn);
 			}.bind(this);
 		}
 		else
@@ -126,36 +142,70 @@ var infoBubble = new Class({
 	{
 		this.delay = (function(){
 			//if(this.options.fade)
-			var fx = this.bubble.retrieve('fxInstance');
+			var fx = this.bubbleContainer.retrieve('fxInstance');
 			fx.start({
 				marginTop: this.options.marginTop,
 				opacity: 0
-			});
-			this.visible = false;
+			}).chain(function(){
+				//this.resetBubble();
+				this.visible = false;
+			}.bind(this));
 		}.bind(this)).delay(this.options.hideDelay);
 	},
 	
-	resizeBubble: function(height, width, fn)
+	resetBubble: function()
 	{
-		console.log(height, width);
-		var fx = this.bubble.retrieve('fxInstance');
-		fx.start({
-			height: height + this.tipHeight,
-			width: width
-		}).chain(fn());
+		this.bubbleContainer.setStyles({
+			height: this.options.size.height + this.tipHeight + (this.options.contentMargin * 2),
+			width: this.options.size.width + (this.options.contentMargin * 2)
+		});
+
+		this.bubble.setStyle('height', this.options.size.height + (this.options.contentMargin * 2));
+
+		this.bubbleContent.setStyle('height', this.options.size.height).empty().addClass('loading');
+	},
+	
+	resizeBubble: function(el, height, width, fn)
+	{
+		var coordinates = el.getCoordinates();
+
+		// TODO add method to calculate the position
+		var left = (coordinates.left + (coordinates.width/2).round() - (width/2).round()) - (this.options.contentMargin * 2);
+		var top = (coordinates.top - height - this.tipHeight - this.options.marginBottom) - (this.options.contentMargin * 2);
+		
+		new Fx.Elements($$(this.bubbleContainer, this.bubble, this.bubbleContent), {
+			onComplete: function(){
+				this.bubble.setStyle('height', height + (this.options.contentMargin * 2));
+				this.bubbleContent.setStyle('height', height).removeClass('loading');
+				fn();
+			}.bind(this)
+		}).start({
+			'0': {
+				height: height + this.tipHeight + (this.options.contentMargin * 2),
+				left: left,
+				top: top,
+				width: width + (this.options.contentMargin * 2)
+			},
+			'1': {
+				height: height + (this.options.contentMargin * 2)
+			},
+			'2': {
+				height: height
+			}
+		});
 	},
 	
 	showBubble: function(el)
 	{
-		$clear(this.delay);
+		this.clearDelay();
 
 		var coordinates = el.getCoordinates();
 
 		// TODO limit left 0, window.width
-		var left = (coordinates.left + (coordinates.width/2).round() - (this.options.size.width/2).round());
-		var top = (coordinates.top - this.options.size.height - this.tipHeight - this.options.marginBottom);
+		var left = (coordinates.left + (coordinates.width/2).round() - (this.options.size.width/2).round()) - (this.options.contentMargin * 2);
+		var top = (coordinates.top - this.options.size.height - this.tipHeight - this.options.marginBottom) - (this.options.contentMargin * 2);
 
-		this.bubble.setStyles({
+		this.bubbleContainer.setStyles({
 			left: left,
 			top: top
 		});
@@ -169,16 +219,16 @@ var infoBubble = new Class({
 
 		if(this.options.fade)
 		{
-			var fx = this.bubble.retrieve('fxInstance');
+			var fx = this.bubbleContainer.retrieve('fxInstance');
 			fx.start({
-				marginTop: 0,
-				opacity: 1
+				marginTop: [this.options.marginTop, 0],
+				opacity: [0, 1]
 			});
 			this.visible = true;
 		}
 		else
 		{
-			this.bubble.fade('show');	
+			this.bubbleContainer.fade('show');	
 		}
 	}
 	
