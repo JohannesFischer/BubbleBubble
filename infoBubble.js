@@ -94,6 +94,22 @@ var infoBubble = new Class({
 			}
 			this.bubbleContent.removeClass('loading');
 		}
+		else if(href.test('.gif|.jpeg|.jpg|.png|.png'))
+		{
+			var image = new Image();
+			image.src = href;
+			image.onload = function(){
+				
+				this.bubbleContent.adopt(image.set('opacity', 0));
+				var imageSize = image.getSize();
+				
+				var fn = function(){
+					image.set('opacity', 1);
+				};
+				
+				this.resizeBubble(imageSize.y, imageSize.x, fn);
+			}.bind(this);
+		}
 		else
 		{
 			new Request.HTML({
@@ -117,6 +133,16 @@ var infoBubble = new Class({
 			});
 			this.visible = false;
 		}.bind(this)).delay(this.options.hideDelay);
+	},
+	
+	resizeBubble: function(height, width, fn)
+	{
+		console.log(height, width);
+		var fx = this.bubble.retrieve('fxInstance');
+		fx.start({
+			height: height + this.tipHeight,
+			width: width
+		}).chain(fn());
 	},
 	
 	showBubble: function(el)
