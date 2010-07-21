@@ -120,7 +120,7 @@ var infoBubble = new Class({
 				var imageSize = image.getSize();
 				
 				var fn = function(){
-					image.fade(1);
+					image.fade(0, 1);
 				};
 				
 				this.resizeBubble(el, imageSize.y, imageSize.x, fn);
