@@ -120,18 +120,14 @@ var infoBubble = new Class({
 				image.src = href;
 				image.onload = function(){					
 					el.store('image', image);
+
+					this.insertImage(el, image);
 				}.bind(this);
 			}
-
-			this.bubbleContent.empty().adopt(image.set('opacity', 0));
-	
-			var imageSize = image.getSize();
-			
-			var fn = function(){
-				image.fade(0, 1);
-			};
-
-			this.resizeBubble(el, imageSize.y, imageSize.x, fn);
+			else
+			{
+				this.insertImage(el, image);
+			}			
 		}
 		else
 		{
@@ -167,6 +163,19 @@ var infoBubble = new Class({
 				this.visible = false;
 			}.bind(this));
 		}.bind(this)).delay(this.options.hideDelay);
+	},
+	
+	insertImage: function(el, image)
+	{
+		this.bubbleContent.empty().adopt(image.set('opacity', 0));
+	
+		var imageSize = image.getSize();
+			
+		var fn = function(){
+			image.fade(0, 1);
+		};
+
+		this.resizeBubble(el, imageSize.y, imageSize.x, fn);	
 	},
 	
 	setContent: function(html)
