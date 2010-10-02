@@ -213,7 +213,10 @@ var infoBubble = new Class({
 			onComplete: function(){
 				this.bubble.setStyle('height', height + (this.options.contentMargin * 2));
 				this.bubbleContent.setStyle('height', height).removeClass('loading');
-				fn();
+				if($defined(fn))
+				{
+					fn();
+				}
 			}.bind(this)
 		}).start({
 			'0': {
