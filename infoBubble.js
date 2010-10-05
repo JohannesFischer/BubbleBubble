@@ -1,3 +1,5 @@
+// requires MooTools More Fx.Elements && Assets
+
 var infoBubble = new Class({
 
 	Implements: Options,
@@ -6,6 +8,7 @@ var infoBubble = new Class({
 	bubble: null,
 	delay: null,
 	elements: null,
+	linkType: null,
 	tipHeight: 10,
 	visible: false,
 
@@ -41,6 +44,7 @@ var infoBubble = new Class({
 					this.hideBubble();
 				}.bind(this),
 				'mouseover': function(){
+					this.setLinkType(el);
 					this.showBubble(el);
 				}.bind(this)
 			});
@@ -98,11 +102,13 @@ var infoBubble = new Class({
 	getContent: function(el)
 	{
 		this.bubbleContent.addClass('loading');
-
+		
 		var href = el.get('href');
 
-		if(href.substr(0, 1) == '#')
+		if(this.linkType == 'inline')
 		{
+			this.resetBubble();
+
 			var id = href.substr(1);
 
 			if($(id))
@@ -110,27 +116,28 @@ var infoBubble = new Class({
 				this.setContent($(id).get('html'));
 			}
 		}
-		else if(href.test('.gif|.jpeg|.jpg|.png|.png'))
+		else if(this.linkType == 'image')
 		{
 			var image = el.retrieve('image');
 
 			if(!image)
 			{
-				image = new Image();
-				image.src = href;
-				image.onload = function(){					
-					el.store('image', image);
-
-					this.insertImage(el, image);
-				}.bind(this);
+				image = new Asset.image(href, {
+					onload: function(){
+						el.store('image', image);
+						this.insertImage(el, image);
+					}.bind(this)
+				});
 			}
 			else
 			{
 				this.insertImage(el, image);
-			}			
+			}
 		}
 		else
 		{
+			this.resetBubble(true);
+
 			if(el.retrieve('responseHTML'))
 			{
 				this.setContent(el.retrieve('responseHTML'));
@@ -149,10 +156,27 @@ var infoBubble = new Class({
 		}
 	},
 	
+	setLinkType: function(el)
+	{
+		var href = el.get('href');
+
+		if(href.substr(0, 1) == '#')
+		{
+			this.linkType = 'inline';
+		}
+		else if(href.test('.gif|.jpeg|.jpg|.png|.png'))
+		{
+			this.linkType = 'image';
+		}
+		else
+		{
+			this.linkType = 'ajax';
+		}
+	},
+	
 	hideBubble: function()
 	{
 		this.delay = (function(){
-			//if(this.options.fade)
 			var fx = this.bubbleContainer.retrieve('fxInstance');
 			fx.start({
 				marginTop: this.options.marginTop,
@@ -167,10 +191,11 @@ var infoBubble = new Class({
 	
 	insertImage: function(el, image)
 	{
-		this.bubbleContent.empty().adopt(image.set('opacity', 0));
+		image.set('opacity', 0);
+		this.bubbleContent.empty().adopt(image);
 	
 		var imageSize = image.getSize();
-			
+
 		var fn = function(){
 			image.fade(0, 1);
 		};
@@ -201,6 +226,10 @@ var infoBubble = new Class({
 	{
 		if(this.bubbleContent.getHeight() == height)
 		{
+			if($defined(fn))
+			{
+				fn();
+			}
 			return;
 		}
 		var coordinates = el.getCoordinates();
@@ -213,6 +242,7 @@ var infoBubble = new Class({
 			onComplete: function(){
 				this.bubble.setStyle('height', height + (this.options.contentMargin * 2));
 				this.bubbleContent.setStyle('height', height).removeClass('loading');
+
 				if($defined(fn))
 				{
 					fn();
@@ -252,8 +282,19 @@ var infoBubble = new Class({
 		var coordinates = el.getCoordinates();
 
 		// TODO limit left 0, window.width
-		var left = (coordinates.left + (coordinates.width/2).round() - (this.options.size.width/2).round()) - this.options.contentMargin;
-		var top = (coordinates.top - this.options.size.height - this.tipHeight - this.options.marginBottom) - (this.options.contentMargin * 2);
+
+		var size = {
+			y: this.options.size.height,
+			x: this.options.size.width
+		};
+		
+		if(this.visible && this.linkType == 'image')
+		{
+			size = this.bubbleContent.getSize();
+		}
+		
+		var left = (coordinates.left + (coordinates.width/2).round() - (size.x/2).round()) - this.options.contentMargin;
+		var top = (coordinates.top - size.y - this.tipHeight - this.options.marginBottom) - (this.options.contentMargin * 2);
 
 		this.bubbleContainer.setStyles({
 			left: left,
@@ -261,7 +302,7 @@ var infoBubble = new Class({
 		});
 
 		this.getContent(el);
-		
+
 		if(this.visible)
 		{
 			return;
