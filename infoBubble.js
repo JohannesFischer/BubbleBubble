@@ -102,7 +102,7 @@ var infoBubble = new Class({
 	getContent: function(el)
 	{
 		this.bubbleContent.addClass('loading');
-		
+
 		var href = el.get('href');
 
 		if(this.linkType == 'inline')
@@ -224,7 +224,9 @@ var infoBubble = new Class({
 	
 	resizeBubble: function(el, height, width, fn)
 	{
-		if(this.bubbleContent.getHeight() == height)
+		var bubbleSize = this.bubbleContent.getSize();
+
+		if(height == bubbleSize.y && width == bubbleSize.x)
 		{
 			if($defined(fn))
 			{
