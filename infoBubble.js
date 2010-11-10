@@ -22,15 +22,21 @@ var infoBubble = new Class({
 		size: {
 			height: 200,
 			width: 250
-		}
+		},
+		stopOnClick: true
 	},
 	
-	initialize: function(selector)
+	initialize: function(selector, options)
 	{
+		this.setOptions(options);
+
 		this.elements = $$(selector);
-		
-		this.attach();
-		this.createBubble();
+
+		if(this.elements.length > 0)
+		{
+			this.attach();
+			this.createBubble();
+		}
 	},
 	
 	attach: function()
@@ -38,7 +44,10 @@ var infoBubble = new Class({
 		this.elements.each(function(el){
 			el.addEvents({
 				'click': function(e){
-					e.stop();
+					if(this.options.stopOnClick)
+					{
+						e.stop();
+					}
 				}.bind(this),
 				'mouseleave': function(){
 					this.hideBubble();
@@ -53,13 +62,12 @@ var infoBubble = new Class({
 	
 	clearDelay: function()
 	{
-		$clear(this.delay);
+		window.clearInterval(this.delay);
 	},
 	
 	createBubble: function()
 	{
-		this.bubbleContainer = new Element('div', {
-			'class': 'infoBubble',
+		this.bubbleContainer = new Element('div.infoBubble', {
 			styles: {
 				height: this.options.size.height + this.tipHeight + (this.options.contentMargin * 2),
 				marginTop: this.options.marginTop,
@@ -228,7 +236,7 @@ var infoBubble = new Class({
 
 		if(height == bubbleSize.y && width == bubbleSize.x)
 		{
-			if($defined(fn))
+			if(fn != undefined)
 			{
 				fn();
 			}
@@ -245,7 +253,7 @@ var infoBubble = new Class({
 				this.bubble.setStyle('height', height + (this.options.contentMargin * 2));
 				this.bubbleContent.setStyle('height', height).removeClass('loading');
 
-				if($defined(fn))
+				if(fn != undefined)
 				{
 					fn();
 				}
