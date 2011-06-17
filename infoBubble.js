@@ -17,6 +17,8 @@ var infoBubble = new Class({
 		fade: true,
 		fxDuration: 250,
 		hideDelay: 2500,
+		ignore: false,
+		imageSource: 'href',
 		marginBottom: 10,
 		marginTop: -20,
 		size: {
@@ -75,7 +77,7 @@ var infoBubble = new Class({
 				top: -1000,
 				width: this.options.size.width + (this.options.contentMargin * 2)
 			}
-		}).inject(document.body);;
+		}).inject(document.body);
 		
 		this.bubble = new Element('div', {
 			'class': 'infoBubble-Bubble',
@@ -130,10 +132,10 @@ var infoBubble = new Class({
 
 			if(!image)
 			{
-				image = new Asset.image(href, {
+				image = new Asset.image(el.get(this.options.imageSource), {
 					onload: function(){
-						el.store('image', image);
 						this.insertImage(el, image);
+						el.store('image', image);
 					}.bind(this)
 				});
 			}
@@ -193,20 +195,31 @@ var infoBubble = new Class({
 				this.activeEl = null;
 				this.resetBubble();
 				this.visible = false;
+				this.bubbleContainer.setStyle('display', 'none');
 			}.bind(this));
 		}.bind(this)).delay(this.options.hideDelay);
 	},
 	
 	insertImage: function(el, image)
 	{
-		image.set('opacity', 0);
+		var loaded = el.retrieve('image');
+		
+		if(!loaded)
+		{
+			image.set('opacity', 0);
+		}
 		this.bubbleContent.empty().adopt(image);
 	
 		var imageSize = image.getSize();
 
-		var fn = function(){
-			image.fade(0, 1);
-		};
+		var fn = false;
+
+		if(!loaded)
+		{
+			fn = function(){
+				image.fade(0, 1);
+			};
+		}
 
 		this.resizeBubble(el, imageSize.y, imageSize.x, fn);	
 	},
@@ -222,6 +235,7 @@ var infoBubble = new Class({
 	{
 		this.bubbleContainer.setStyles({
 			height: this.options.size.height + this.tipHeight + (this.options.contentMargin * 2),
+			top: 0,
 			width: this.options.size.width + (this.options.contentMargin * 2)
 		});
 
@@ -236,7 +250,7 @@ var infoBubble = new Class({
 
 		if(height == bubbleSize.y && width == bubbleSize.x)
 		{
-			if(fn != undefined)
+			if(fn != undefined && fn !== false)
 			{
 				fn();
 			}
@@ -253,7 +267,7 @@ var infoBubble = new Class({
 				this.bubble.setStyle('height', height + (this.options.contentMargin * 2));
 				this.bubbleContent.setStyle('height', height).removeClass('loading');
 
-				if(fn != undefined)
+				if(fn != undefined && fn !== false)
 				{
 					fn();
 				}
@@ -281,6 +295,9 @@ var infoBubble = new Class({
 	
 	showBubble: function(el)
 	{
+		//if(this.options.ignore !== false)
+		this.bubbleContainer.setStyle('display', 'block');
+		
 		this.clearDelay();
 		
 		if(this.activeEl == el)
