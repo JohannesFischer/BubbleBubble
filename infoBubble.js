@@ -17,6 +17,7 @@ var infoBubble = new Class({
 		fade: true,
 		fxDuration: 250,
 		hideDelay: 2500,
+        hideOnClick: true, // TODO: close bubble when clicked on
 		ignore: false,
 		imageSource: 'href',
 		marginBottom: 10,
@@ -32,9 +33,9 @@ var infoBubble = new Class({
 	{
 		this.setOptions(options);
 
-		this.elements = $$(selector);
+        this.selector = selector;
 
-		if(this.elements.length > 0)
+		if($$(selector).length > 0)
 		{
 			this.attach();
 			this.createBubble();
@@ -43,23 +44,20 @@ var infoBubble = new Class({
 	
 	attach: function()
 	{
-		this.elements.each(function(el){
-			el.addEvents({
-				'click': function(e){
-					if(this.options.stopOnClick)
-					{
-						e.stop();
-					}
-				}.bind(this),
-				'mouseleave': function(){
-					this.hideBubble();
-				}.bind(this),
-				'mouseover': function(){
-					this.setLinkType(el);
-					this.showBubble(el);
-				}.bind(this)
-			});
-		}, this);
+        if (this.options.stopOnClick) {
+            document.body.addEvent('click:relay(' +  this.selector + ')', function(event, target){
+                event.preventDefault();
+            });
+        }
+
+        document.body.addEvent('mouseleave:relay(' +  this.selector + ')', function (event, target) {
+            //this.hideBubble();
+        }.bind(this));
+
+        document.body.addEvent('mouseover:relay(' +  this.selector + ')', function (event, target) {
+            this.setLinkType(target);
+			this.showBubble(target);
+        }.bind(this));
 	},
 	
 	clearDelay: function()
@@ -79,8 +77,7 @@ var infoBubble = new Class({
 			}
 		}).inject(document.body);
 		
-		this.bubble = new Element('div', {
-			'class': 'infoBubble-Bubble',
+		this.bubble = new Element('div.infoBubble-Bubble', {
 			events: {
 				'mouseleave': function(){
 					this.hideBubble();
@@ -101,8 +98,7 @@ var infoBubble = new Class({
 			}));
 		}
 		
-		this.bubbleContent = new Element('div', {
-			'class': 'infoBubble-Content',
+		this.bubbleContent = new Element('div.infoBubble-Content', {
 			styles: {
 				height: this.options.size.height
 			}
@@ -123,14 +119,14 @@ var infoBubble = new Class({
 
 			if($(id))
 			{
-				this.setContent($(id).get('html'));
+				this.setContent(document.id(id).get('html'));
 			}
 		}
 		else if(this.linkType == 'image')
 		{
 			var image = el.retrieve('image');
 
-			if(!image)
+			if (!image)
 			{
 				image = new Asset.image(el.get(this.options.imageSource), {
 					onload: function(){
@@ -202,26 +198,23 @@ var infoBubble = new Class({
 	
 	insertImage: function(el, image)
 	{
-		var loaded = el.retrieve('image');
+		var fn = false,
+            loaded = el.retrieve('image'),
+            imageSize;
 		
-		if(!loaded)
-		{
-			image.set('opacity', 0);
-		}
+    	image.set('opacity', 0);
+
 		this.bubbleContent.empty().adopt(image);
 	
-		var imageSize = image.getSize();
+		imageSize = image.getSize();
 
-		var fn = false;
+        if (!loaded)
+        {
+            image.setStyle('opacity', 0);
+            fade = true;
+        }
 
-		if(!loaded)
-		{
-			fn = function(){
-				image.fade(0, 1);
-			};
-		}
-
-		this.resizeBubble(el, imageSize.y, imageSize.x, fn);	
+		this.resizeBubble(el, imageSize.y, imageSize.x, fade);	
 	},
 	
 	setContent: function(html)
@@ -244,13 +237,13 @@ var infoBubble = new Class({
 		this.bubbleContent.setStyle('height', this.options.size.height).empty().addClass('loading');
 	},
 	
-	resizeBubble: function(el, height, width, fn)
+	resizeBubble: function(el, height, width, fade)
 	{
 		var bubbleSize = this.bubbleContent.getSize();
 
 		if(height == bubbleSize.y && width == bubbleSize.x)
 		{
-			if(fn != undefined && fn !== false)
+			if(fn !== undefined && fn !== false)
 			{
 				fn();
 			}
@@ -267,9 +260,9 @@ var infoBubble = new Class({
 				this.bubble.setStyle('height', height + (this.options.contentMargin * 2));
 				this.bubbleContent.setStyle('height', height).removeClass('loading');
 
-				if(fn != undefined && fn !== false)
+				if(fade !== undefined && fade === true)
 				{
-					fn();
+					this.bubbleContent.getFirst().fade(1);
 				}
 			}.bind(this)
 		}).start({
