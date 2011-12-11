@@ -216,19 +216,18 @@ var InfoBubble = new Class({
 	
 	insertImage: function (el, image)
 	{
-		var fn = false,
+        var fade = false,
+            fn = false,
             loaded = el.retrieve('image'),
             imageSize;
 		
-    	image.set('opacity', 0);
+    	image.setStyle('opacity', 0);
 
 		this.bubbleContent.empty().adopt(image);
 	
 		imageSize = image.getSize();
 
-        if (!loaded)
-        {
-            image.setStyle('opacity', 0);
+        if (!loaded) {
             fade = true;
         }
 
@@ -261,9 +260,10 @@ var InfoBubble = new Class({
 
 		if (height == bubbleSize.y && width == bubbleSize.x)
 		{
-			if (fade !== undefined && fade === true)
-            {
+			if (fade !== undefined && fade === true) {
                 this.bubbleContent.getFirst().fade(1);
+            } else {
+                this.bubbleContent.getFirst().setStyle('opacity', 1);
             }
 			return;
 		}
@@ -281,7 +281,9 @@ var InfoBubble = new Class({
 				if (fade !== undefined && fade === true)
 				{
 					this.bubbleContent.getFirst().fade(1);
-				}
+				} else {
+                    this.bubbleContent.getFirst().setStyle('opacity', 1);
+                }
 			}.bind(this)
 		}).start({
 			'0': {
@@ -333,7 +335,6 @@ var InfoBubble = new Class({
 		
 		var left = (coordinates.left + (coordinates.width/2).round() - (size.x/2).round()) - this.options.contentMargin;
 		var top = (coordinates.top - size.y - this.tipHeight - this.options.marginBottom) - (this.options.contentMargin * 2);
-        console.log(left, top)
 
 		this.bubbleContainer.setStyles({
 			left: left,
