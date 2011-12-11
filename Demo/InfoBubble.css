@@ -15,33 +15,47 @@
 		-moz-box-shadow: 0 0 5px rgba(0, 0, 0, .3);
 		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, .3);
 		position: relative;
-		}	
+		}
 		.infoBubble-Bubble:before {
 			border: 11px solid transparent; /* tip height + border width*/
-			border-top-color: #aaa;
 			bottom: -22px; /* value = - border-top-width - border-bottom-width */
 			content:"\00a0";
 			display: block; /* reduce the damage in FF3.0 */
 			height: 0;
 			left: 50%;
-			margin-left: -21px;
+			margin-left: -11px;
 			position: absolute;
 			width: 0;
+		}
+		.infoBubble-bottom .infoBubble-Bubble:before {
+			border-bottom-color: #aaa;
+			top: -22px;
+		}
+		infoBubble-top .infoBubble-Bubble:before {
+			bottom: -22px; /* value = - border-top-width - border-bottom-width */
+			border-top-color: #aaa;
 		}
 		
 		/* creates the smaller  triangle */
 		.infoBubble-Bubble:after {
 			border: 10px solid transparent; /* tip height */
-			border-top-color: #fff;
-			bottom: -20px; /* value = - border-top-width - border-bottom-width */
-			content:"\00a0";
-			display:block; /* reduce the damage in FF3.0 */
-			height:0;
+			content: "\00a0";
+			display: block;
+			height: 0;
 			left: 50%;
-			margin-left: -20px;
-			position:absolute;
-			width:0;
+			margin-left: -10px;
+			position: absolute;
+			width: 0;
 		}
+		.infoBubble-bottom .infoBubble-Bubble:after {
+			border-bottom-color: #fff;
+			top: -20px; /* value = - border-top-width - border-bottom-width */
+		}
+		.infoBubble-top .infoBubble-Bubble:after {
+			border-top-color: #fff;
+			bottom: -20px;
+		}
+
 		.infoBubble-Content {
 			margin: 10px;
 			overflow: hidden;
