@@ -22,16 +22,33 @@
 			content:"\00a0";
 			display: block; /* reduce the damage in FF3.0 */
 			height: 0;
-			left: 50%;
-			margin-left: -11px;
 			position: absolute;
 			width: 0;
+		}
+		.infoBubble-bottom .infoBubble-Bubble:before,
+		.infoBubble-top .infoBubble-Bubble:before {
+			left: 50%;
+			margin-left: -11px;
+		}
+		.infoBubble-left .infoBubble-Bubble:before,
+		.infoBubble-right .infoBubble-Bubble:before {
+			margin-top: -11px;
+			top: 50%;
 		}
 		.infoBubble-bottom .infoBubble-Bubble:before {
 			border-bottom-color: #aaa;
 			top: -22px;
 		}
-		infoBubble-top .infoBubble-Bubble:before {
+		.infoBubble-left .infoBubble-Bubble:before {
+			border-left-color: #aaa;
+			margin-top: -11px;
+			right: -22px;
+		}
+		.infoBubble-right .infoBubble-Bubble:before {
+			border-right-color: #aaa;
+			left: -22px;
+		}
+		.infoBubble-top .infoBubble-Bubble:before {
 			bottom: -22px; /* value = - border-top-width - border-bottom-width */
 			border-top-color: #aaa;
 		}
@@ -42,14 +59,30 @@
 			content: "\00a0";
 			display: block;
 			height: 0;
-			left: 50%;
-			margin-left: -10px;
 			position: absolute;
 			width: 0;
+		}
+		.infoBubble-bottom .infoBubble-Bubble:after,
+		.infoBubble-top .infoBubble-Bubble:after {
+			left: 50%;
+			margin-left: -10px;
+		}
+		.infoBubble-left .infoBubble-Bubble:after,
+		.infoBubble-right .infoBubble-Bubble:after {
+			margin-top: -10px;
+			top: 50%;
 		}
 		.infoBubble-bottom .infoBubble-Bubble:after {
 			border-bottom-color: #fff;
 			top: -20px; /* value = - border-top-width - border-bottom-width */
+		}
+		.infoBubble-left .infoBubble-Bubble:after {
+			border-left-color: #fff;
+			right: -20px;
+		}
+		.infoBubble-right .infoBubble-Bubble:after {
+			border-right-color: #fff;
+			left: -20px;
 		}
 		.infoBubble-top .infoBubble-Bubble:after {
 			border-top-color: #fff;
@@ -63,4 +96,25 @@
 
 .loading {
 	background: url(indicator.gif) no-repeat 50% 50%;
+}
+
+/* for testing */
+
+.infoBubble-Bubble .center-h {
+	border: 2px solid #f00;
+	height: 1px;
+	left: 0;
+	margin-top: -1px;
+	position: absolute;
+	top: 50%;
+	width: 100%;
+}
+.infoBubble-Bubble .center-v {
+	border: 2px solid #f00;
+	height: 100%;
+	left: 50%;
+	margin-left: -1px;
+	position: absolute;
+	top: 0;
+	width: 1px;
 }

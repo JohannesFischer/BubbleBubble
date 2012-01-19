@@ -4,12 +4,29 @@
 <head>
     <title>InfoBubble Demo</title>
 	<link rel="stylesheet" type="text/css" href="InfoBubble.css" />
-	<script type="text/javascript" src="mootools-core-1.4.1-full-nocompat-yc.js"></script>
+	<script type="text/javascript" src="mootools-core-1.4.2-full-nocompat-yc.js"></script>
 	<script type="text/javascript" src="mootools-more-1.4.0.1.js"></script>
 	<script type="text/javascript" src="../Source/InfoBubble.js"></script>
 	<script type="text/javascript">
 		window.addEvent('domready', function(){
-			new InfoBubble('a');
+			new InfoBubble('a', {
+                animate: true,
+                contentMargin: 10,
+                fxDuration: 500,
+                hideDelay: 1500,
+                hideOnClick: true, // TODO: close bubble when clicked on
+                ignore: false,
+                imageSource: 'href',
+                margin: 10,
+				offset: 20,
+                position: 'right', // left, bottom, right, top
+                size: {
+                    height: 200,
+                    width: 250
+                },
+                showOnclick: false, // TODO: attach on click showBubble when true
+                stopOnclick: true       
+            });
 		});
 	</script>
 	<style type="text/css">
@@ -59,23 +76,28 @@
 
 		<div class="spacer"></div>
 	
-		<h1>infoBubble</h1>
+		<h1>demo</h1>
 		
 		<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. <a href="ajax.html">AJAX Content</a> ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
 		et magnis dis <a href="#InlineContent">Inline Content</a>, nascetur ridiculus mus.</p>
 		
+		<p>Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet <a href="#InlineContent" class="bubble-top">top</a>, vulputate eget, arcu. In enim
+		justo, rhoncus ut, <a href="#InlineContent" class="bubble-bottom">bottom</a> a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer
+		<a href="#InlineContent" class="bubble-left">left</a>. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo
+		ligula, <a href="#InlineContent" class="bubble-right">right</a> eu, consequat vitae, eleifend ac, enim.</p>
+		
 		<ul>
 			<li>
-				<a href="images/demo-image-1.jpg">Lorem Ipsum</a>
+				<a href="images/demo-image-1.jpg">Image 1</a>
 			</li>
 			<li>
-				<a href="images/demo-image-2.jpg">Dorem Ipsum</a>
+				<a href="images/demo-image-2.jpg">Image 2</a>
 			</li>
 			<li>
-				<a href="images/demo-image-3.jpg">Worem Ipsum</a>
+				<a href="images/demo-image-3.jpg">Image 3</a>
 			</li>
 			<li>
-				<a href="images/demo-image-4.jpg">Zorem Ipsum</a>
+				<a href="images/demo-image-4.jpg">Image 4</a>
 			</li>
 		</ul>
 	
