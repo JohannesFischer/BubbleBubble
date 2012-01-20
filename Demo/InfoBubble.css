@@ -1,6 +1,6 @@
 .infoBubble {
     left: -1000px;
-	padding: 5px; /* shadow size */
+	/*padding: 5px;*/
 	position: absolute;
     top: 0;
 	z-index: 100;

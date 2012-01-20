@@ -36,10 +36,9 @@ var InfoBubble = new Class({
 		contentMargin: 10,
 		fxDuration: 250,
 		hideDelay: 2500,
-        hideOnClick: true, // TODO: close bubble when clicked on
-		ignore: false,
+        hideOnClick: true, // TODO: inject close element (x) and close bubble when clicked
 		imageSource: 'href',
-		margin: 10,
+		margin: 10, // deistnace to element in px
 		offset: 20,
         position: 'top', // top, bottom, auto
 		size: {
@@ -87,21 +86,25 @@ var InfoBubble = new Class({
     calculatePosition: function (position, coordinates, bubbleSize)
     {
         var new_coordinates = {};
+		
+		if (bubbleSize === undefined || bubbleSize === null) {
+			bubbleSize = this.bubble.getSize();
+		}
 
         if (position.test('bottom|top')) {
-			new_coordinates.left = ((coordinates.left + (coordinates.width / 2)) - (this.bubble.getWidth() / 2)).round();
+			new_coordinates.left = (coordinates.left + (coordinates.width / 2) - (bubbleSize.x / 2)).round();
         } else if (position.test('left|right')) {
-			new_coordinates.top = (coordinates.top - (coordinates.height / 2).round()) - (this.bubble.getHeight() / 2).round() + this.tipHeight;
+			new_coordinates.top = (coordinates.top + (coordinates.height / 2) - (bubbleSize.y / 2)).round();
 		}
 
         if (position === 'bottom') {
-            new_coordinates.top = coordinates.bottom + this.options.margin;
+            new_coordinates.top = coordinates.bottom + this.options.margin + this.tipHeight;
         } else if (position === 'left') {
-			new_coordinates.left = coordinates.left - this.bubbleContainer.getWidth() - this.options.margin;
+			new_coordinates.left = coordinates.left - bubbleSize.x - this.options.margin - this.tipHeight; // not acurate
 		} else if (position === 'right') {
-            new_coordinates.left = coordinates.right + this.options.margin;
+            new_coordinates.left = coordinates.right + this.options.margin + this.tipHeight;
         } else if (position === 'top') {
-			new_coordinates.top = coordinates.top - this.bubbleContainer.getHeight();
+			new_coordinates.top = coordinates.top - bubbleSize.y - this.options.margin - this.tipHeight; // not acurate
         }
 
         return new_coordinates;
@@ -121,13 +124,7 @@ var InfoBubble = new Class({
 				width: this.options.size.width + (this.options.contentMargin * 2)
 			}
 		}).inject(document.body);
-        
-		/*
-        if (this.options.position.test('bottom|left|right|top')) {
-            this.bubbleContainer.addClass('infoBubble-' + this.options.position);
-        }
-		*/
-		
+
 		this.bubble = new Element('div.infoBubble-Bubble', {
 			events: {
 				'mouseleave': function () {
@@ -283,11 +280,14 @@ var InfoBubble = new Class({
 	
 	resizeBubble: function (el, height, width, fade)
 	{
-		var bubbleSize = this.bubbleContent.getSize(),
-            coordinates,
+		var bubbleSize,
+		    coordinates,
             left,
             position,
             top;
+
+		bubbleSize = this.bubble.getSize();
+		coordinates = el.getCoordinates();
 
 		if (height === bubbleSize.y && width === bubbleSize.x)
 		{
@@ -298,9 +298,12 @@ var InfoBubble = new Class({
             }
 			return;
 		}
-		coordinates = el.getCoordinates();
+		newSize = {
+			x: width + (this.options.contentMargin * 2),
+			y: height + (this.options.contentMargin * 2)
+		};
 
-        new_coordinates = this.calculatePosition(this.options.position, coordinates, bubbleSize);
+        new_coordinates = this.calculatePosition(this.options.position, coordinates, newSize);
 
 		new Fx.Elements($$(this.bubbleContainer, this.bubble, this.bubbleContent), {
             duration: this.options.fxDuration,
@@ -397,11 +400,7 @@ var InfoBubble = new Class({
 
 		coordinates = el.getCoordinates();
 
-		// TODO limit left 0, window.width
-		size = {
-			y: this.options.size.height,
-			x: this.options.size.width
-		};
+		size = null;
 
 		if (this.visible && this.linkType === 'image') {
 			size = this.bubbleContent.getSize();
