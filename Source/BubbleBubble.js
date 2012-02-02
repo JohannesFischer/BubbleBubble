@@ -169,7 +169,7 @@ var BubbleBubble = new Class({
 		if (this.linkType === 'inline')	{
 			this.resetBubble();
 
-			id = target.substr(1);
+			id = target.substr(target.indexOf('#') + 1);
 
 			if (document.id(id)) {
 				this.setContent(document.id(id).get('html'));
@@ -355,7 +355,7 @@ var BubbleBubble = new Class({
 	{
 		var target = el.get(this.options.contentSource);
 
-		if (target.substr(0, 1) === '#') {
+		if (target.indexOf('#') > -1) {
 			this.linkType = 'inline';
 		} else if (target.test('.gif|.jpeg|.jpg|.png')) {
 			this.linkType = 'image';
