@@ -2,8 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title>InfoBubble Demo</title>
-	<link rel="stylesheet" type="text/css" href="InfoBubble.css" />
+    <title>BubbleBubble Demo</title>
+	<link rel="stylesheet" type="text/css" href="BubbleBubble.css" />
 	<script type="text/javascript" src="mootools-core-1.4.3-full-nocompat-yc.js"></script>
 	<script type="text/javascript" src="mootools-more-1.4.0.1.js"></script>
 	<script type="text/javascript" src="../Source/BubbleBubble.js"></script>
@@ -12,9 +12,8 @@
 			new BubbleBubble('a', {
                 animate: true,
                 contentMargin: 10,
-				contentSource: 'rel',
                 fxDuration: 500,
-                hideDelay: 1500,
+                hideDelay: 1000,
                 hideOnClick: true, // TODO: close bubble when clicked on
                 margin: 5,
 				offset: 20, // used for show and hide animate
@@ -78,7 +77,7 @@
 		<h1>demo</h1>
 		
 		<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. <a href="ajax.html">AJAX Content</a> ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
-		et magnis dis <a href="#" rel="#InlineContent">Inline Content</a>, nascetur ridiculus mus.</p>
+		et magnis dis <a href="#InlineContent">Inline Content</a>, nascetur ridiculus mus.</p>
 		
 		<p>Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet <a href="#InlineContent" class="bubble-top">top</a>, vulputate eget, arcu. In enim
 		justo, rhoncus ut, <a href="#InlineContent" class="bubble-bottom">bottom</a> a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer

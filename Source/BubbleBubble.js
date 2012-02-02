@@ -117,7 +117,7 @@ var BubbleBubble = new Class({
 	
 	createBubble: function ()
 	{
-		this.bubbleContainer = new Element('div.bubbleBubble', {
+		this.bubbleContainer = new Element('div.BubbleBubble', {
 			styles: {
 				height: this.options.size.height + this.tipHeight + (this.options.contentMargin * 2),
 				opacity: 0,
@@ -125,7 +125,7 @@ var BubbleBubble = new Class({
 			}
 		}).inject(document.body);
 
-		this.bubble = new Element('div.bubbleBubble-Bubble', {
+		this.bubble = new Element('div.BubbleBubble-Bubble', {
 			events: {
 				'mouseleave': function () {
 					this.hideBubble();
@@ -145,7 +145,7 @@ var BubbleBubble = new Class({
 			}));
 		}
 		
-		this.bubbleContent = new Element('div.bubbleBubble-Content', {
+		this.bubbleContent = new Element('div.BubbleBubble-Content', {
 			styles: {
 				height: this.options.size.height
 			}
@@ -372,12 +372,12 @@ var BubbleBubble = new Class({
 			if (el.hasClass('bubble-' + p)) {
 				position = p;
             }
-            if(this.bubbleContainer.hasClass('bubbleBubble-' + p)) {
-				this.bubbleContainer.removeClass('bubbleBubble-' + p);
+            if(this.bubbleContainer.hasClass('BubbleBubble-' + p)) {
+				this.bubbleContainer.removeClass('BubbleBubble-' + p);
             }
         }, this);
 
-        this.bubbleContainer.addClass('bubbleBubble-' + position);
+        this.bubbleContainer.addClass('BubbleBubble-' + position);
 
 		return position;
     },

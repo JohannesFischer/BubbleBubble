@@ -1,11 +1,11 @@
-.infoBubble {
+.BubbleBubble {
     left: -1000px;
 	/*padding: 5px;*/
 	position: absolute;
     top: 0;
 	z-index: 100;
 	}
-	.infoBubble-Bubble {
+	.BubbleBubble-Bubble {
 		background-color: #fff;
 		border: 1px solid #aaa;
 		border-radius: 4px;
@@ -16,7 +16,7 @@
 		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, .3);
 		position: relative;
 		}
-		.infoBubble-Bubble:before {
+		.BubbleBubble-Bubble:before {
 			border: 11px solid transparent; /* tip height + border width*/
 			bottom: -22px; /* value = - border-top-width - border-bottom-width */
 			content:"\00a0";
@@ -25,36 +25,36 @@
 			position: absolute;
 			width: 0;
 		}
-		.infoBubble-bottom .infoBubble-Bubble:before,
-		.infoBubble-top .infoBubble-Bubble:before {
+		.BubbleBubble-bottom .BubbleBubble-Bubble:before,
+		.BubbleBubble-top .BubbleBubble-Bubble:before {
 			left: 50%;
 			margin-left: -11px;
 		}
-		.infoBubble-left .infoBubble-Bubble:before,
-		.infoBubble-right .infoBubble-Bubble:before {
+		.BubbleBubble-left .BubbleBubble-Bubble:before,
+		.BubbleBubble-right .BubbleBubble-Bubble:before {
 			margin-top: -11px;
 			top: 50%;
 		}
-		.infoBubble-bottom .infoBubble-Bubble:before {
+		.BubbleBubble-bottom .BubbleBubble-Bubble:before {
 			border-bottom-color: #aaa;
 			top: -22px;
 		}
-		.infoBubble-left .infoBubble-Bubble:before {
+		.BubbleBubble-left .BubbleBubble-Bubble:before {
 			border-left-color: #aaa;
 			margin-top: -11px;
 			right: -22px;
 		}
-		.infoBubble-right .infoBubble-Bubble:before {
+		.BubbleBubble-right .BubbleBubble-Bubble:before {
 			border-right-color: #aaa;
 			left: -22px;
 		}
-		.infoBubble-top .infoBubble-Bubble:before {
+		.BubbleBubble-top .BubbleBubble-Bubble:before {
 			bottom: -22px; /* value = - border-top-width - border-bottom-width */
 			border-top-color: #aaa;
 		}
 		
 		/* creates the smaller  triangle */
-		.infoBubble-Bubble:after {
+		.BubbleBubble-Bubble:after {
 			border: 10px solid transparent; /* tip height */
 			content: "\00a0";
 			display: block;
@@ -62,34 +62,34 @@
 			position: absolute;
 			width: 0;
 		}
-		.infoBubble-bottom .infoBubble-Bubble:after,
-		.infoBubble-top .infoBubble-Bubble:after {
+		.BubbleBubble-bottom .BubbleBubble-Bubble:after,
+		.BubbleBubble-top .BubbleBubble-Bubble:after {
 			left: 50%;
 			margin-left: -10px;
 		}
-		.infoBubble-left .infoBubble-Bubble:after,
-		.infoBubble-right .infoBubble-Bubble:after {
+		.BubbleBubble-left .BubbleBubble-Bubble:after,
+		.BubbleBubble-right .BubbleBubble-Bubble:after {
 			margin-top: -10px;
 			top: 50%;
 		}
-		.infoBubble-bottom .infoBubble-Bubble:after {
+		.BubbleBubble-bottom .BubbleBubble-Bubble:after {
 			border-bottom-color: #fff;
 			top: -20px; /* value = - border-top-width - border-bottom-width */
 		}
-		.infoBubble-left .infoBubble-Bubble:after {
+		.BubbleBubble-left .BubbleBubble-Bubble:after {
 			border-left-color: #fff;
 			right: -20px;
 		}
-		.infoBubble-right .infoBubble-Bubble:after {
+		.BubbleBubble-right .BubbleBubble-Bubble:after {
 			border-right-color: #fff;
 			left: -20px;
 		}
-		.infoBubble-top .infoBubble-Bubble:after {
+		.BubbleBubble-top .BubbleBubble-Bubble:after {
 			border-top-color: #fff;
 			bottom: -20px;
 		}
 
-		.infoBubble-Content {
+		.BubbleBubble-Content {
 			margin: 10px;
 			overflow: hidden;
 		}
@@ -100,7 +100,7 @@
 
 /* for testing */
 
-.infoBubble-Bubble .center-h {
+.BubbleBubble-Bubble .center-h {
 	border: 2px solid #f00;
 	height: 1px;
 	left: 0;
@@ -109,7 +109,7 @@
 	top: 50%;
 	width: 100%;
 }
-.infoBubble-Bubble .center-v {
+.BubbleBubble-Bubble .center-v {
 	border: 2px solid #f00;
 	height: 100%;
 	left: 50%;
