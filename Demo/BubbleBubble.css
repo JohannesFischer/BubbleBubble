@@ -1,6 +1,5 @@
 .BubbleBubble {
     left: -1000px;
-	/*padding: 5px;*/
 	position: absolute;
     top: 0;
 	z-index: 100;
@@ -9,11 +8,7 @@
 		background-color: #fff;
 		border: 1px solid #aaa;
 		border-radius: 4px;
-		-moz-border-radius: 4px;
-		-webkit-border-radius: 4px;
 		box-shadow: 0 0 5px rgba(0, 0, 0, .3);
-		-moz-box-shadow: 0 0 5px rgba(0, 0, 0, .3);
-		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, .3);
 		position: relative;
 		}
 		.BubbleBubble-Bubble:before {
@@ -94,7 +89,25 @@
 			overflow: hidden;
 		}
 
-.loading {
+.BubbleBubble-close {
+	background: #fff;
+	border-radius: 10px;
+	cursor: pointer;
+	font-size: 16px;
+	height: 20px;
+	line-height: 20px;
+	position: absolute;
+	right: 5px;
+	text-align: center;
+	top: 5px;
+	width: 20px;
+	z-index: 5;
+	}
+	.BubbleBubble-close:hover {
+		color: #000;
+	}
+
+.BubbleBubble-loading {
 	background: url(indicator.gif) no-repeat 50% 50%;
 }
 

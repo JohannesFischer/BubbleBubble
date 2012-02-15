@@ -1,0 +1,22 @@
+.BubbleBubble{left:-1000px;position:absolute;top:0;z-index:100}
+.BubbleBubble-Bubble{background-color:#fff;border:1px solid #aaa;border-radius:4px;box-shadow:0 0 5px rgba(0,0,0,.3);position:relative}
+.BubbleBubble-Bubble:before{border:11px solid transparent;bottom:-22px;content:"\00a0";display:block;height:0;position:absolute;width:0}
+.BubbleBubble-bottom .BubbleBubble-Bubble:before,.BubbleBubble-top .BubbleBubble-Bubble:before{left:50%;margin-left:-11px}
+.BubbleBubble-left .BubbleBubble-Bubble:before,.BubbleBubble-right .BubbleBubble-Bubble:before{margin-top:-11px;top:50%}
+.BubbleBubble-bottom .BubbleBubble-Bubble:before{border-bottom-color:#aaa;top:-22px}
+.BubbleBubble-left .BubbleBubble-Bubble:before{border-left-color:#aaa;margin-top:-11px;right:-22px}
+.BubbleBubble-right .BubbleBubble-Bubble:before{border-right-color:#aaa;left:-22px}
+.BubbleBubble-top .BubbleBubble-Bubble:before{bottom:-22px;border-top-color:#aaa}
+.BubbleBubble-Bubble:after{border:10px solid transparent;content:"\00a0";display:block;height:0;position:absolute;width:0}
+.BubbleBubble-bottom .BubbleBubble-Bubble:after,.BubbleBubble-top .BubbleBubble-Bubble:after{left:50%;margin-left:-10px}
+.BubbleBubble-left .BubbleBubble-Bubble:after,.BubbleBubble-right .BubbleBubble-Bubble:after{margin-top:-10px;top:50%}
+.BubbleBubble-bottom .BubbleBubble-Bubble:after{border-bottom-color:#fff;top:-20px}
+.BubbleBubble-left .BubbleBubble-Bubble:after{border-left-color:#fff;right:-20px}
+.BubbleBubble-right .BubbleBubble-Bubble:after{border-right-color:#fff;left:-20px}
+.BubbleBubble-top .BubbleBubble-Bubble:after{border-top-color:#fff;bottom:-20px}
+.BubbleBubble-Content{margin:10px;overflow:hidden}
+.BubbleBubble-close{background:#fff;border-radius:10px;cursor:pointer;font-size:16px;height:20px;line-height:20px;position:absolute;right:5px;text-align:center;top:5px;width:20px;z-index:5}
+.BubbleBubble-close:hover{color:#000}
+.BubbleBubble-loading{background:url(indicator.gif) no-repeat 50% 50%}
+.BubbleBubble-Bubble .center-h{border:2px solid #f00;height:1px;left:0;margin-top:-1px;position:absolute;top:50%;width:100%}
+.BubbleBubble-Bubble .center-v{border:2px solid #f00;height:100%;left:50%;margin-left:-1px;position:absolute;top:0;width:1px}

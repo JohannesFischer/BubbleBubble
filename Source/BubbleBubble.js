@@ -33,20 +33,24 @@ var BubbleBubble = new Class({
 
 	options: {
         animate: true,
+		closeButton: false,
+		contentClass: null,
 		contentMargin: 10,
 		contentSource: 'href',
 		fxDuration: 250,
 		hideDelay: 2500,
-        hideOnClick: true, // TODO: inject close element (x) and close bubble when clicked
 		margin: 10, // deistance to element in px
 		offset: 20,
-        position: 'top', // top, bottom, auto
+        position: 'top', // top, right, bottom or left
 		size: {
 			height: 200,
 			width: 250
 		},
-        showOnclick: false, // TODO: attach on click showBubble when true
-		stopOnclick: true
+		stopOnclick: true,
+		
+		// not implemented
+		showOnclick: false, // TODO: attach on click showBubble when true
+		hideOnClick: true // TODO: inject close element (x) and close bubble when clicked
 	},
 	
 	initialize: function (selector, options)
@@ -54,10 +58,6 @@ var BubbleBubble = new Class({
 		this.setOptions(options);
 
         this.selector = selector;
-
-		if (!this.options.animate) {
-			this.options.contentMargin = 0;
-		}
 
 		if ($$(selector).length > 0) {
 			this.attach();
@@ -139,17 +139,32 @@ var BubbleBubble = new Class({
 			}
 		}).inject(this.bubbleContainer);
 
+		if (this.options.closeButton) {
+			new Element('span.BubbleBubble-close', {
+				events: {
+					'click': function () {
+						this.hideBubble(false);
+					}.bind(this)
+				},
+				html: '&times;'
+			}).inject(this.bubble);
+		}
+
 		if (this.options.animate) {
 			this.bubbleContainer.store('fxInstance', new Fx.Morph(this.bubbleContainer, {
 				duration: this.options.fxDuration
 			}));
 		}
-		
+
 		this.bubbleContent = new Element('div.BubbleBubble-Content', {
 			styles: {
 				height: this.options.size.height
 			}
 		}).inject(this.bubble);
+
+		if (this.options.contentClass) {
+			this.bubbleContent.addClass(this.options.contentClass);
+		}
 	},
 	
 	getContent: function (el)
@@ -158,7 +173,7 @@ var BubbleBubble = new Class({
 		    image,
 		    target;
 
-		this.bubbleContent.addClass('loading');
+		this.bubbleContent.addClass('BubbleBubble-loading');
 
 		target = el.get(this.options.contentSource);
 		
@@ -199,7 +214,7 @@ var BubbleBubble = new Class({
 				new Request.HTML({
 					onSuccess: function (responseTree, responseElements, responseHTML) {
 						el.store('responseHTML', responseHTML);
-						this.bubbleContent.removeClass('loading');
+						this.bubbleContent.removeClass('BubbleBubble-loading');
 					}.bind(this),
 					update: this.bubbleContent,
 					url: target	
@@ -216,7 +231,7 @@ var BubbleBubble = new Class({
 		};
 	},
 	
-	hideBubble: function ()
+	hideBubble: function (delayed)
 	{
 		var margin,
 		    styles;
@@ -238,7 +253,7 @@ var BubbleBubble = new Class({
                 this.bubbleContainer.fade('hide');
                 this.reset();
             }
-		}.bind(this)).delay(this.options.hideDelay);
+		}.bind(this)).delay(delayed === undefined || delayed === true ? this.options.hideDelay : 0);
 	},
 	
 	insertImage: function (el, image)
@@ -279,7 +294,7 @@ var BubbleBubble = new Class({
 
 		this.bubble.setStyle('height', this.options.size.height + (this.options.contentMargin * 2));
 
-		this.bubbleContent.setStyle('height', this.options.size.height).empty().addClass('loading');
+		this.bubbleContent.setStyle('height', this.options.size.height).empty().addClass('BubbleBubble-loading');
 	},
 	
 	resizeBubble: function (el, height, width, fade)
@@ -315,7 +330,7 @@ var BubbleBubble = new Class({
             duration: this.options.fxDuration,
 			onComplete: function () {
 				this.bubble.setStyle('height', height + (this.options.contentMargin * 2));
-				this.bubbleContent.setStyle('height', height).removeClass('loading');
+				this.bubbleContent.setStyle('height', height).removeClass('BubbleBubble-loading');
 
 				if (fade !== undefined && fade === true) {
 					this.bubbleContent.getFirst().fade(1);
@@ -341,14 +356,14 @@ var BubbleBubble = new Class({
 	
 	setBubbleContent: function (content)
 	{
-		this.bubbleContent.removeClass('loading').adopt(content);	
+		this.bubbleContent.removeClass('BubbleBubble-loading').adopt(content);	
 	},
 	
 	setContent: function (html)
 	{
 		this.resetBubble();
 
-		this.bubbleContent.removeClass('loading').set('html', html);
+		this.bubbleContent.removeClass('BubbleBubble-loading').set('html', html);
 	},
 	
 	setLinkType: function (el)

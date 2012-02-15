@@ -10,20 +10,17 @@
 	<script type="text/javascript">
 		window.addEvent('domready', function(){
 			new BubbleBubble('a', {
-                animate: true,
-                contentMargin: 10,
+				closeButton: true,
+				contentClass: 'custom-class',
                 fxDuration: 500,
                 hideDelay: 1000,
                 hideOnClick: true, // TODO: close bubble when clicked on
                 margin: 5,
-				offset: 20, // used for show and hide animate
                 position: 'right', // left, bottom, right, top
                 size: {
                     height: 200,
                     width: 250
-                },
-                showOnclick: false, // TODO: attach on click showBubble when true
-                stopOnclick: true       
+                }
             });
 		});
 	</script>
